@@ -1,5 +1,7 @@
 package main.java.org.example.model;
 
+import main.java.org.example.exceptions.Excepciones;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,19 +16,33 @@ public class Estudiante {
     private String apellido;
     private int edad;
     private Date fechaDeNacimiento;
-    private Boolean estado;
+    private String estado;
 
-    public Estudiante(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, Boolean estado) throws ParseException {
+    public Estudiante(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, String estado) throws ParseException {
         this.CUI = cui;
         this.carnet = carnet;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaDeNacimiento = convertirStringADate(fechaDeNacimientoString);
         this.edad = calcularEdad(convertirStringADate(fechaDeNacimientoString));
-        this.estado = estado;
+
+        try {
+
+            validarEstado(estado);
+
+            this.estado = estado.toUpperCase();
+
+        } catch (Excepciones.EstadoInvalidoException e) {
+
+            System.out.println("Error al establecer el estado: " + e.getMessage());
+
+            this.estado = "INACTIVO";
+
+        }
+
     }
 
-    public static Estudiante getInstancia(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, Boolean estado) throws ParseException {
+    public static Estudiante getInstancia(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, String estado) throws ParseException {
         if (estudiante == null) {
             estudiante = new Estudiante(cui, carnet, nombre, apellido, fechaDeNacimientoString, estado);
         }
@@ -77,12 +93,26 @@ public class Estudiante {
 
     }
 
-    public Boolean getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
+    public void setEstado(String estado) {
+
+        try {
+
+            validarEstado(estado);
+
+            this.estado = estado.toUpperCase();
+
+        } catch (Excepciones.EstadoInvalidoException e) {
+
+            System.out.println("Error al establecer el estado: " + e.getMessage());
+
+            this.estado = "INACTIVO";
+
+        }
+
     }
 
     public static int calcularEdad(Date fechaDeNacimiento){
@@ -131,11 +161,19 @@ public class Estudiante {
 
         System.out.println("Fecha de Nacimiento: " + getFechaDeNacimiento());
 
-        //Explicación: Esto es un if anidado que si el estado es "True" entonces devolvera el Texto "Activo" por lo contrario si es "Falso" devuelve "Inactivo",
-
-        System.out.println("Estado: " + (getEstado() ? "Activo" : "Inactivo"));
+        System.out.println("Estado: " + getEstado());
 
         System.out.println("---------------");
+    }
+
+    public void validarEstado (String estado) throws Excepciones.EstadoInvalidoException {
+
+        if (!estado.equalsIgnoreCase("matriculado") &&
+                !estado.equalsIgnoreCase("inactivo") &&
+                !estado.equalsIgnoreCase("graduado")) {
+            throw new Excepciones.EstadoInvalidoException("Estado inválido: " + estado + ". Debe ser 'matriculado', 'inactivo' o 'graduado'. \nNota: El estado por el error pasara a INACTIVO.");
+        }
+
     }
 
 }
