@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class Estudiante {
 
+    private static Estudiante estudiante;
     private final int CUI;
     private final int carnet;
     private String nombre;
@@ -23,6 +24,13 @@ public class Estudiante {
         this.fechaDeNacimiento = convertirStringADate(fechaDeNacimientoString);
         this.edad = calcularEdad(convertirStringADate(fechaDeNacimientoString));
         this.estado = estado;
+    }
+
+    public static Estudiante getInstancia(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, Boolean estado) throws ParseException {
+        if (estudiante == null) {
+            estudiante = new Estudiante(cui, carnet, nombre, apellido, fechaDeNacimientoString, estado);
+        }
+        return estudiante;
     }
 
     public int getCUI() {
@@ -87,8 +95,6 @@ public class Estudiante {
 
         int respuestaEdad = actual.get(Calendar.YEAR) - nacimiento.get(Calendar.YEAR);
 
-        System.out.println(respuestaEdad);
-
         if (actual.get(Calendar.MONTH) < nacimiento.get(Calendar.MONTH) ||
 
                 (actual.get(Calendar.MONTH) == nacimiento.get(Calendar.MONTH) &&
@@ -109,6 +115,27 @@ public class Estudiante {
 
         return formato.parse(fechaString);
 
+    }
+
+    public void mostrarEstudiante() {
+
+        System.out.println("CUI: " + getCUI());
+
+        System.out.println("Carnet: " + getCarnet());
+
+        System.out.println("Nombre: " + getNombre());
+
+        System.out.println("Apellido: " + getApellido());
+
+        System.out.println("Edad: " + getEdad());
+
+        System.out.println("Fecha de Nacimiento: " + getFechaDeNacimiento());
+
+        //Explicación: Esto es un if anidado que si el estado es "True" entonces devolvera el Texto "Activo" por lo contrario si es "Falso" devuelve "Inactivo",
+
+        System.out.println("Estado: " + (getEstado() ? "Activo" : "Inactivo"));
+
+        System.out.println("---------------");
     }
 
 }

@@ -3,20 +3,26 @@ package main.java.org.example;
 import main.java.org.example.model.Estudiante;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws ParseException {
 
-        Estudiante estudiante = new Estudiante(123456, 987654, "Juan", "Pérez", "2004/4/25", true);
+        List<Estudiante> estudiantes = new ArrayList<>();
 
-        System.out.println("CUI: " + estudiante.getCUI());
-        System.out.println("Carnet: " + estudiante.getCarnet());
-        System.out.println("Nombre: " + estudiante.getNombre());
-        System.out.println("Apellido: " + estudiante.getApellido());
-        System.out.println("Edad: " + estudiante.getEdad());
-        System.out.println("Fecha de Nacimiento: " + estudiante.getFechaDeNacimiento());
-        System.out.println("Estado: " + (estudiante.getEstado() ? "Activo" : "Inactivo"));
+        estudiantes.add(new Estudiante(123456, 987654, "Juan", "Pérez", "2004/04/25", true));
+
+        estudiantes.add(new Estudiante(654321, 456789, "Ana", "Gómez", "2003/02/15", false));
+
+        estudiantes.add(new Estudiante(111222, 333444, "Luis", "Martínez", "2002/08/30", true));
+
+        for (Estudiante estudiante : estudiantes) {
+
+            estudiante.mostrarEstudiante();
+
+        }
 
     }
 }
