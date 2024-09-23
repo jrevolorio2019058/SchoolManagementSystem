@@ -8,4 +8,24 @@ public class Excepciones {
         }
     }
 
+    public static class GestorAcademicoException extends Exception {
+
+        public GestorAcademicoException(String mensaje) {
+
+            super(mensaje);
+
+        }
+
+    }
+
+    public static class MainException extends Exception {
+
+        public MainException(String mensaje) {
+
+            super(mensaje);
+
+        }
+
+    }
+
 }

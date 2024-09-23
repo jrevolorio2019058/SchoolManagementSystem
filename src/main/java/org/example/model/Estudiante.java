@@ -141,7 +141,9 @@ public class Estudiante {
 
     public static Date convertirStringADate(String fechaString) throws ParseException {
 
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        formato.setLenient(false);
 
         return formato.parse(fechaString);
 
