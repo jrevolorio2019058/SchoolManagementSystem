@@ -2,13 +2,8 @@ package main.java.org.example;
 
 import main.java.org.example.controller.GestorAcademico;
 import main.java.org.example.exceptions.Excepciones;
-import main.java.org.example.model.Curso;
-import main.java.org.example.model.Estudiante;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -202,7 +197,69 @@ public class Main {
 
                 case 4:
 
-                    //Listar
+                    System.out.println("Ingrese el modelo que desee utilizar:");
+
+                    System.out.println("    1. Estudiante");
+
+                    System.out.println("    2. Curso");
+
+                    int leer = sc.nextInt();
+
+                    System.out.println("");
+
+                    switch(leer){
+
+                        case 1:
+
+                            System.out.println("Ingrese lo que desee listar:");
+
+                            System.out.println("    1. Estudiantes");
+
+                            System.out.println("    2. Estudiante");
+
+                            int opcionListar = sc.nextInt();
+
+                            System.out.println("");
+
+                            switch(opcionListar){
+
+                                case 1:
+
+                                    System.out.println("Ingrese el carnet del usuario a eliminar:");
+
+                                    int carnet = sc.nextInt();
+
+                                    ga.mostrarEstudiante(carnet);
+
+                                    break;
+
+                                case 2:
+
+                                    ga.mostrarEstudiantes();
+
+                                    break;
+
+                                default:
+
+                                    System.out.println("Opción no Valida.");
+
+                                    break;
+
+                            }
+
+                            break;
+
+                        case 2:
+
+                            break;
+
+                        default:
+
+                            System.out.println("Opción no Valida");
+
+                            break;
+
+                    }
 
                     break;
 
