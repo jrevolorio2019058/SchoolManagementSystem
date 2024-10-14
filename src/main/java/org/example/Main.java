@@ -67,15 +67,15 @@ public class Main {
 
                                 System.out.println("Ingrese Nombre: ");
 
-                                String nombre = sc.next();
+                                String nombre = sc.nextLine();
 
                                 System.out.println("Ingrese Apellido: ");
 
-                                String apellido = sc.next();
+                                String apellido = sc.nextLine();
 
                                 System.out.println("Ingrese Fecha de Nacimiento: ");
 
-                                String fechaNacimiento = sc.next();
+                                String fechaNacimiento = sc.nextLine();
 
                                 if(fechaNacimiento.length() != 10 || fechaNacimiento.charAt(2) != '/' || fechaNacimiento.charAt(5) != '/'){
 
@@ -85,7 +85,7 @@ public class Main {
 
                                 System.out.println("Ingrese Estado");
 
-                                String estado = sc.next();
+                                String estado = sc.nextLine();
 
                                 ga.agregarEstudiante(CUI, carnet, nombre, apellido, fechaNacimiento, estado);
 
@@ -101,7 +101,27 @@ public class Main {
 
                         case 2:
 
-                            //Agregar Curso
+                            System.out.println("Ingrese nombre del Curso: ");
+
+                            sc.nextLine();
+
+                            String nombreCurso = sc.nextLine();
+
+                            System.out.println("Ingrese descripción del Curso: ");
+
+                            String descripcionCurso = sc.nextLine();
+
+                            System.out.println("Ingrese numero de Creditos del Curso: ");
+
+                            int numCreditos = sc.nextInt();
+
+                            System.out.println("Ingrese versión del Curso: ");
+
+                            sc.nextLine();
+
+                            String versionCurso = sc.nextLine();
+
+                            ga.agregarCurso(nombreCurso, descripcionCurso, numCreditos, versionCurso);
 
                             break;
 
@@ -213,9 +233,9 @@ public class Main {
 
                             System.out.println("Ingrese lo que desee listar:");
 
-                            System.out.println("    1. Estudiantes");
+                            System.out.println("    1. Estudiante");
 
-                            System.out.println("    2. Estudiante");
+                            System.out.println("    2. Estudiantes");
 
                             int opcionListar = sc.nextInt();
 
@@ -225,7 +245,7 @@ public class Main {
 
                                 case 1:
 
-                                    System.out.println("Ingrese el carnet del usuario a eliminar:");
+                                    System.out.println("Ingrese el carnet del usuario a mostrar:");
 
                                     int carnet = sc.nextInt();
 
@@ -250,6 +270,42 @@ public class Main {
                             break;
 
                         case 2:
+
+                            System.out.println("Ingrese lo que desee listar:");
+
+                            System.out.println("    1. Curso");
+
+                            System.out.println("    2. Cursos");
+
+                            int opListar = sc.nextInt();
+
+                            System.out.println("");
+
+                            switch(opListar){
+
+                                case 1:
+
+                                    System.out.println("Ingrese el id del curso a listar:");
+
+                                    int id = sc.nextInt();
+
+                                    ga.mostrarCurso(id);
+
+                                    break;
+
+                                case 2:
+
+                                    ga.mostrarCursos();
+
+                                    break;
+
+                                default:
+
+                                    System.out.println("Opción no Valida.");
+
+                                    break;
+
+                            }
 
                             break;
 
@@ -319,17 +375,3 @@ public class Main {
 
     }
 }
-
-//Código Extra (Temporal)
-
-/*cursos.add(new Curso(1, "Programación Java", "Curso de introducción a Java", 3, "1.0"));
-
-        cursos.add(new Curso(2, "Desarrollo Web", "Curso sobre HTML, CSS y JavaScript", 4, "1.0"));
-
-        cursos.add(new Curso(3, "Bases de Datos", "Curso de introducción a bases de datos SQL", 3, "1.0"));
-
-        for(Curso curso : cursos) {
-
-            curso.mostrarCurso();
-
-        }*/

@@ -47,6 +47,16 @@ public class GestorAcademico {
 
     }
 
+    public void agregarCurso(String nombre, String descipcion, int numCreditos, String version) throws ParseException {
+
+        int id = cursoList.size() + 1;
+
+        cursoList.add(new Curso(id, nombre, descipcion, numCreditos, version));
+
+        System.out.println("El curso " + nombre + " " + descipcion + " fue agregado");
+
+    }
+
     public void eliminarEstudiante(int carnet) {
 
         Estudiante estudianteEliminado = null;
@@ -208,8 +218,6 @@ public class GestorAcademico {
 
     public void mostrarEstudiante(int carnet){
 
-        Estudiante buscarEstudiante = null;
-
         try{
 
             for (Estudiante estudiante : estudianteList) {
@@ -243,6 +251,52 @@ public class GestorAcademico {
         for (Estudiante estudiante : estudianteList) {
 
             estudiante.mostrarEstudiante();
+
+        }
+
+    }
+
+    public void mostrarCurso(int id){
+
+        try{
+
+            boolean find = false;
+
+            for (Curso curso : cursoList) {
+
+                if (curso.getId() == id) {
+
+                    System.out.println("-------------------");
+
+                    curso.mostrarCurso();
+
+                    find = true;
+
+                    break;
+
+                }
+
+            }
+
+            if(!find){
+
+                throw new Excepciones.EstadoInvalidoException("ID No encontrado.");
+
+            }
+
+        }catch(Excepciones.EstadoInvalidoException e){
+
+            System.out.println("Error | " + e.getMessage());
+
+        }
+
+    }
+
+    public void mostrarCursos(){
+
+        for (Curso curso : cursoList){
+
+            curso.mostrarCurso();
 
         }
 
