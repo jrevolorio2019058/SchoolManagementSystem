@@ -151,7 +151,7 @@ public class Main {
 
                         case 1:
 
-                            System.out.println("Ingrese el carnet del usuario a utilizar:");
+                            System.out.println("Ingrese el carnet del usuario a modificar:");
 
                             int carnet = sc.nextInt();
 
@@ -161,7 +161,11 @@ public class Main {
 
                         case 2:
 
-                            //Modificar Curso
+                            System.out.println("Ingrese el ID del curso a modificar: ");
+
+                            int id = sc.nextInt();
+
+                            ga.editarCurso(id);
 
                             break;
 
@@ -201,7 +205,11 @@ public class Main {
 
                         case 2:
 
-                            //Eliminar Curso
+                            System.out.println("Ingrese el id del Curso a eliminar:");
+
+                            int id = sc.nextInt();
+
+                            ga.eliminarCurso(id);
 
                             break;
 

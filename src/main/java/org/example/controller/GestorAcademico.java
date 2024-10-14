@@ -107,6 +107,56 @@ public class GestorAcademico {
 
     }
 
+    public void eliminarCurso(int id) {
+
+        Curso cursoEliminado = null;
+
+        String nombreCurso = null;
+
+        try{
+
+            if(cursoList.isEmpty()) {
+
+                throw new Excepciones.GestorAcademicoException("NO hay Cursos registrados.");
+
+            }else{
+
+                for (Curso curso : cursoList) {
+
+                    if (curso.getId() == id) {
+
+                        cursoEliminado = curso;
+
+                        break;
+
+                    }
+
+                }
+
+                if(cursoEliminado != null) {
+
+                    nombreCurso = cursoEliminado.getNombre();
+
+                    cursoList.remove(cursoEliminado);
+
+                    System.out.println("El Curso " + nombreCurso + " fue eliminado");
+
+                }else {
+
+                    throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+
+                }
+
+            }
+
+        }catch(Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e){
+
+            System.out.println("Error | " + e.getMessage());
+
+        }
+
+    }
+
     public void editarEstudiante(int carnet){
 
         try{
@@ -209,6 +259,111 @@ public class GestorAcademico {
             }
 
         }catch(Excepciones.GestorAcademicoException | ParseException e){
+
+            System.out.println("Error | " + e.getMessage());
+
+        }
+
+    }
+
+    public void editarCurso(int id){
+
+        try{
+
+            if(cursoList.isEmpty()) {
+
+                throw new Excepciones.GestorAcademicoException("NO hay Cursos registrados.");
+
+            }else{
+
+                for (Curso curso : cursoList) {
+
+                    if (curso.getId() == id) {
+
+                        System.out.println("Curso a modificar: " + curso.getNombre());
+
+                        System.out.println("Que desea actualizar?");
+
+                        System.out.println("1. Nombre");
+
+                        System.out.println("2. Descripción");
+
+                        System.out.println("3. Creditos");
+
+                        System.out.println("4. Versión");
+
+                        int option = sc.nextInt();
+
+                        System.out.println(" - - - - - - - - - - - - - - - - - - - - - -");
+
+                        switch (option) {
+
+                            case 1:
+
+                                System.out.println("Ingrese el nuevo nombre: ");
+
+                                sc.nextLine();
+
+                                String nombre = sc.nextLine();
+
+                                curso.setNombre(nombre);
+
+                                break;
+
+                            case 2:
+
+                                System.out.println("Ingrese la nueva descripción: ");
+
+                                sc.nextLine();
+
+                                String descripcion = sc.nextLine();
+
+                                curso.setDescripcion(descripcion);
+
+                                break;
+
+                            case 3:
+
+                                System.out.println("Ingrese el nuevo credito");
+
+                                sc.nextLine();
+
+                                int credito = sc.nextInt();
+
+                                curso.setNumeroCreditos(credito);
+
+                                break;
+
+                            case 4:
+
+
+                                System.out.println("Ingrese la nueva versión: ");
+
+                                sc.nextLine();
+
+                                String version = sc.nextLine();
+
+                                curso.setVersion(version);
+
+                                break;
+
+                            default:
+
+                                throw new Excepciones.GestorAcademicoException("Opción no valida");
+                        }
+
+
+                    }else {
+
+                        throw new Excepciones.GestorAcademicoException("ID No encontrado.");
+
+                    }
+
+                }
+
+            }
+
+        }catch(Excepciones.GestorAcademicoException e){
 
             System.out.println("Error | " + e.getMessage());
 
