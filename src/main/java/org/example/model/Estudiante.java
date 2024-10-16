@@ -172,8 +172,10 @@ public class Estudiante {
 
         if (!estado.equalsIgnoreCase("matriculado") &&
                 !estado.equalsIgnoreCase("inactivo") &&
-                !estado.equalsIgnoreCase("graduado")) {
-            throw new Excepciones.EstadoInvalidoException("Estado inválido: " + estado + ". Debe ser 'matriculado', 'inactivo' o 'graduado'. \nNota: El estado por el error pasara a INACTIVO.");
+                !estado.equalsIgnoreCase("graduado") &&
+                !estado.equalsIgnoreCase("inhabilitado"))
+        {
+            throw new Excepciones.EstadoInvalidoException("Estado inválido: " + estado + ". Debe ser 'matriculado', 'inhabilitado', 'inactivo' o 'graduado'. \nNota: El estado por el error pasara a INACTIVO.");
         }
 
     }

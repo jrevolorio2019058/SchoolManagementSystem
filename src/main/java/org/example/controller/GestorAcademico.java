@@ -1,6 +1,7 @@
 package main.java.org.example.controller;
 
 import main.java.org.example.exceptions.Excepciones;
+import main.java.org.example.interfaces.ServiciosAcademicosI;
 import main.java.org.example.model.Curso;
 import main.java.org.example.model.Estudiante;
 
@@ -10,20 +11,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class GestorAcademico {
+public class GestorAcademico implements ServiciosAcademicosI {
 
     public static GestorAcademico instancia;
     private List<Estudiante> estudianteList;
     private List<Curso> cursoList;
-    private HashMap<Integer, Estudiante> inscripciones;
+    private HashMap<Estudiante, Curso> inscripciones;
 
     Scanner sc = new Scanner(System.in);
 
-    public GestorAcademico() {
+    private GestorAcademico() {
 
-        estudianteList = new ArrayList<>();
-        cursoList = new ArrayList<>();
-        inscripciones = new HashMap<>();
+        if(estudianteList == null){
+
+            estudianteList = new ArrayList<>();
+
+        }
+
+        if(cursoList == null){
+
+            cursoList = new ArrayList<>();
+
+        }
+
+        if(inscripciones == null){
+
+            inscripciones = new HashMap<>();
+
+        }
 
     }
 
@@ -39,11 +54,51 @@ public class GestorAcademico {
 
     }
 
+
     public void agregarEstudiante(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, String estado) throws ParseException {
 
         estudianteList.add(new Estudiante(cui, carnet, nombre, apellido, fechaDeNacimientoString, estado));
 
         System.out.println("El estudiante " + nombre + " " + apellido + " fue agregado");
+
+    }
+
+    @Override
+    public void matricularEstudiante(int carnet) {
+
+        try{
+
+            if(estudianteList.isEmpty()) {
+
+                throw new Excepciones.GestorAcademicoException("NO hay Estudiantes registrados.");
+
+            }else{
+
+                for (Estudiante estudiante : estudianteList) {
+
+                    if (estudiante.getCarnet() == carnet) {
+
+                        estudiante.setEstado("Matriculado");
+
+                        System.out.println(estudiante.getNombre() + " " + estudiante.getApellido() + "fue matriculado exitosamente");
+
+                        break;
+
+                    }else {
+
+                        throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+
+                    }
+
+                }
+
+            }
+
+        }catch(Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e){
+
+            System.out.println("Error | " + e.getMessage());
+
+        }
 
     }
 
@@ -59,8 +114,6 @@ public class GestorAcademico {
 
     public void eliminarEstudiante(int carnet) {
 
-        Estudiante estudianteEliminado = null;
-
         String nombreEstudiante = null;
 
         try{
@@ -75,25 +128,58 @@ public class GestorAcademico {
 
                     if (estudiante.getCarnet() == carnet) {
 
-                        estudianteEliminado = estudiante;
+                        nombreEstudiante = estudiante.getNombre() + " " + estudiante.getApellido();
+
+                        estudiante.setEstado("Inactivo");
+
+                        System.out.println("El estudiante " + nombreEstudiante + " fue eliminado");
 
                         break;
+
+                    }else {
+
+                        throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
 
                     }
 
                 }
 
-                if(estudianteEliminado != null) {
+            }
 
-                    nombreEstudiante = estudianteEliminado.getNombre() + " " + estudianteEliminado.getApellido();
+        }catch(Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e){
 
-                    estudianteList.remove(estudianteEliminado);
+            System.out.println("Error | " + e.getMessage());
 
-                    System.out.println("El estudiante " + nombreEstudiante + " fue eliminado");
+        }
 
-                }else {
+    }
 
-                    throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+    @Override
+    public void inhabilitarEstudiante(int carnet) {
+
+        try{
+
+            if(estudianteList.isEmpty()) {
+
+                throw new Excepciones.GestorAcademicoException("NO hay Estudiantes registrados.");
+
+            }else{
+
+                for (Estudiante estudiante : estudianteList) {
+
+                    if (estudiante.getCarnet() == carnet) {
+
+                        estudiante.setEstado("Inhabilitado");
+
+                        System.out.println(estudiante.getNombre() + " " + estudiante.getApellido() + "fue matriculado exitosamente");
+
+                        break;
+
+                    }else {
+
+                        throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+
+                    }
 
                 }
 
@@ -183,8 +269,6 @@ public class GestorAcademico {
 
                         System.out.println("4. Edad");
 
-                        System.out.println("5. Estado");
-
                         int option = sc.nextInt();
 
                         System.out.println(" - - - - - - - - - - - - - - - - - - - - - -");
@@ -229,16 +313,6 @@ public class GestorAcademico {
                                 int edad = sc.nextInt();
 
                                 estudiante.setEdad(edad);
-
-                                break;
-
-                            case 5:
-
-                                System.out.println("Ingrese el nuevo estado: ");
-
-                                String estado = sc.next();
-
-                                estudiante.setEstado(estado);
 
                                 break;
 

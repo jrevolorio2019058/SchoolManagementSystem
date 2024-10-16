@@ -21,15 +21,15 @@ public class Main {
 
             System.out.println("Ingrese la Opción que desee realizar:");
 
-            System.out.println("    1. Agregar");
+            System.out.println("    1. Crear Curso o Estudiante");
 
-            System.out.println("    2. Modificar");
+            System.out.println("    2. Modificar Curso o Estudiante");
 
-            System.out.println("    3. Eliminar");
+            System.out.println("    3. Eliminar Curso o Estudiante");
 
-            System.out.println("    4. Listar");
+            System.out.println("    4. Listar Curso o Estudiante");
 
-            System.out.println("    5. Inscribir");
+            System.out.println("    5. Gestión Estudiante");
 
             System.out.println("    6. Salir");
 
@@ -67,6 +67,8 @@ public class Main {
 
                                 System.out.println("Ingrese Nombre: ");
 
+                                sc.nextLine();
+
                                 String nombre = sc.nextLine();
 
                                 System.out.println("Ingrese Apellido: ");
@@ -83,11 +85,7 @@ public class Main {
 
                                 }
 
-                                System.out.println("Ingrese Estado");
-
-                                String estado = sc.nextLine();
-
-                                ga.agregarEstudiante(CUI, carnet, nombre, apellido, fechaNacimiento, estado);
+                                ga.agregarEstudiante(CUI, carnet, nombre, apellido, fechaNacimiento, "Inhabilitado");
 
                                 ga.mostrarEstudiantes();
 
@@ -329,7 +327,41 @@ public class Main {
 
                 case 5:
 
-                    //Inscribir
+                    System.out.println("Ingrese la opción que desee realizar: ");
+
+                    System.out.println("1. Matricular Estudiante");
+
+                    System.out.println("2. Inhabilitar Estudiante");
+
+                    int gestionEstudiante = sc.nextInt();
+
+                    switch(gestionEstudiante){
+
+                        case 1:
+
+                            System.out.println("Ingrese el carnet del estudiante a matricular: ");
+
+                            int carnetMatriculacion = sc.nextInt();
+
+                            ga.matricularEstudiante(carnetMatriculacion);
+
+                            break;
+
+                        case 2:
+
+                            System.out.println("Ingrese el carnet del estudiante a matricular: ");
+
+                            int carnetInhabilitacion = sc.nextInt();
+
+                            ga.inhabilitarEstudiante(carnetInhabilitacion);
+
+                            break;
+
+                        default:
+
+                            break;
+
+                    }
 
                     break;
 
