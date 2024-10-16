@@ -5,6 +5,7 @@ import main.java.org.example.interfaces.ServiciosAcademicosI;
 import main.java.org.example.model.Curso;
 import main.java.org.example.model.Estudiante;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
     }
 
 
-    public void agregarEstudiante(int cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, String estado) throws ParseException {
+    public void agregarEstudiante(BigInteger cui, int carnet, String nombre, String apellido, String fechaDeNacimientoString, String estado) throws ParseException {
 
         estudianteList.add(new Estudiante(cui, carnet, nombre, apellido, fechaDeNacimientoString, estado));
 
@@ -63,35 +64,33 @@ public class GestorAcademico implements ServiciosAcademicosI {
     @Override
     public void matricularEstudiante(int carnet) {
 
-        try{
+        try {
 
-            if(estudianteList.isEmpty()) {
+            if (estudianteList.isEmpty()) {
 
                 throw new Excepciones.GestorAcademicoException("NO hay Estudiantes registrados.");
 
-            }else{
+            } else {
+
+                boolean encontrado = false;
 
                 for (Estudiante estudiante : estudianteList) {
 
                     if (estudiante.getCarnet() == carnet) {
-
                         estudiante.setEstado("Matriculado");
-
-                        System.out.println(estudiante.getNombre() + " " + estudiante.getApellido() + "fue matriculado exitosamente");
-
+                        System.out.println(estudiante.getNombre() + " " + estudiante.getApellido() + " fue matriculado exitosamente");
+                        encontrado = true;
                         break;
-
-                    }else {
-
-                        throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
-
                     }
+                }
 
+                if (!encontrado) {
+                    throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
                 }
 
             }
 
-        }catch(Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e){
+        } catch (Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e) {
 
             System.out.println("Error | " + e.getMessage());
 
@@ -601,7 +600,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
             }
 
             if (estudianteEncontrado == null) {
-                throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+                throw new Excepciones.EstudianteNoInscritoEnCursoException("Carnet No encontrado.");
             }
 
             Curso cursoEncontrado = null;
@@ -613,7 +612,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
             }
 
             if (cursoEncontrado == null) {
-                throw new Excepciones.EstadoInvalidoException("Curso No encontrado.");
+                throw new Excepciones.EstudianteNoInscritoEnCursoException("Curso No encontrado.");
             }
 
             List<Curso> cursosInscritos = inscripciones.getOrDefault(estudianteEncontrado, new ArrayList<>());
@@ -622,7 +621,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
 
             if (!yaInscrito) {
 
-                throw new Excepciones.EstadoInvalidoException("El estudiante no está inscrito en el curso.");
+                throw new Excepciones.EstudianteNoInscritoEnCursoException("El estudiante no está inscrito en el curso.");
 
             }
 
@@ -640,7 +639,7 @@ public class GestorAcademico implements ServiciosAcademicosI {
 
             System.out.println("El estudiante " + estudianteEncontrado.getNombre() + " " + estudianteEncontrado.getApellido() + " ha sido desinscrito del curso " + cursoEncontrado.getNombre());
 
-        } catch (Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e) {
+        } catch (Excepciones.EstudianteNoInscritoEnCursoException | Excepciones.GestorAcademicoException e) {
 
             System.out.println("Error | " + e.getMessage());
 

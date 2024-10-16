@@ -3,6 +3,7 @@ package main.java.org.example;
 import main.java.org.example.controller.GestorAcademico;
 import main.java.org.example.exceptions.Excepciones;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -40,7 +41,7 @@ public class Main {
                         case 1:
                             try {
                                 System.out.println("Ingrese CUI: ");
-                                int CUI = sc.nextInt();
+                                BigInteger CUI = sc.nextBigInteger();
                                 System.out.println("Ingrese Carnet: ");
                                 int carnet = sc.nextInt();
                                 System.out.println("Ingrese Nombre: ");
