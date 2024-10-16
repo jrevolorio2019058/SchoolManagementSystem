@@ -6,17 +6,14 @@ import main.java.org.example.model.Curso;
 import main.java.org.example.model.Estudiante;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GestorAcademico implements ServiciosAcademicosI {
 
     public static GestorAcademico instancia;
     private List<Estudiante> estudianteList;
     private List<Curso> cursoList;
-    private HashMap<Estudiante, Curso> inscripciones;
+    private HashMap<Estudiante, List<Curso>> inscripciones;
 
     Scanner sc = new Scanner(System.in);
 
@@ -102,7 +99,8 @@ public class GestorAcademico implements ServiciosAcademicosI {
 
     }
 
-    public void agregarCurso(String nombre, String descipcion, int numCreditos, String version) throws ParseException {
+    @Override
+    public void agregarCurso(String nombre, String descipcion, int numCreditos, String version){
 
         int id = cursoList.size() + 1;
 
@@ -529,6 +527,147 @@ public class GestorAcademico implements ServiciosAcademicosI {
 
         }
 
+    }
+
+    @Override
+    public void inscribirEstudianteCurso(int carnet, int id) {
+        try {
+            if (estudianteList.isEmpty()) {
+                throw new Excepciones.GestorAcademicoException("NO hay Estudiantes registrados.");
+            }
+
+            if (cursoList.isEmpty()) {
+                throw new Excepciones.GestorAcademicoException("No hay Cursos registrados.");
+            }
+
+            Estudiante estudianteEncontrado = null;
+            for (Estudiante estudiante : estudianteList) {
+                if (estudiante.getCarnet() == carnet) {
+                    estudianteEncontrado = estudiante;
+                    break;
+                }
+            }
+
+            if (estudianteEncontrado == null) {
+                throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+            }
+
+            Curso cursoEncontrado = null;
+            for (Curso curso : cursoList) {
+                if (curso.getId() == id) {
+                    cursoEncontrado = curso;
+                    break;
+                }
+            }
+
+            if (cursoEncontrado == null) {
+                throw new Excepciones.EstadoInvalidoException("Curso No encontrado.");
+            }
+
+            List<Curso> cursosInscritos = inscripciones.getOrDefault(estudianteEncontrado, new ArrayList<>());
+            boolean yaInscrito = cursosInscritos.stream().anyMatch(c -> c.getId() == id);
+
+            if (yaInscrito) {
+                throw new Excepciones.EstudianteYaInscritoException("El estudiante ya está inscrito en el curso.");
+            }
+
+            cursosInscritos.add(cursoEncontrado);
+            inscripciones.put(estudianteEncontrado, cursosInscritos);
+
+            System.out.println("El estudiante " + estudianteEncontrado.getNombre() + " " + estudianteEncontrado.getApellido() + " ha sido inscrito en el curso " + cursoEncontrado.getNombre());
+
+        } catch (Excepciones.EstudianteYaInscritoException | Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e) {
+            System.out.println("Error | " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void desinscribirEstudianteCurso(int carnet, int id) {
+        try {
+            if (estudianteList.isEmpty()) {
+                throw new Excepciones.GestorAcademicoException("NO hay Estudiantes registrados.");
+            }
+
+            if (cursoList.isEmpty()) {
+                throw new Excepciones.GestorAcademicoException("No hay Cursos registrados.");
+            }
+
+            Estudiante estudianteEncontrado = null;
+            for (Estudiante estudiante : estudianteList) {
+                if (estudiante.getCarnet() == carnet) {
+                    estudianteEncontrado = estudiante;
+                    break;
+                }
+            }
+
+            if (estudianteEncontrado == null) {
+                throw new Excepciones.EstadoInvalidoException("Carnet No encontrado.");
+            }
+
+            Curso cursoEncontrado = null;
+            for (Curso curso : cursoList) {
+                if (curso.getId() == id) {
+                    cursoEncontrado = curso;
+                    break;
+                }
+            }
+
+            if (cursoEncontrado == null) {
+                throw new Excepciones.EstadoInvalidoException("Curso No encontrado.");
+            }
+
+            List<Curso> cursosInscritos = inscripciones.getOrDefault(estudianteEncontrado, new ArrayList<>());
+
+            boolean yaInscrito = cursosInscritos.stream().anyMatch(c -> c.getId() == id);
+
+            if (!yaInscrito) {
+
+                throw new Excepciones.EstadoInvalidoException("El estudiante no está inscrito en el curso.");
+
+            }
+
+            cursosInscritos.removeIf(c -> c.getId() == id);
+
+            if (cursosInscritos.isEmpty()) {
+
+                inscripciones.remove(estudianteEncontrado);
+
+            } else {
+
+                inscripciones.put(estudianteEncontrado, cursosInscritos);
+
+            }
+
+            System.out.println("El estudiante " + estudianteEncontrado.getNombre() + " " + estudianteEncontrado.getApellido() + " ha sido desinscrito del curso " + cursoEncontrado.getNombre());
+
+        } catch (Excepciones.EstadoInvalidoException | Excepciones.GestorAcademicoException e) {
+
+            System.out.println("Error | " + e.getMessage());
+
+        }
+    }
+
+    public void mostrarInscripciones() {
+        if (inscripciones.isEmpty()) {
+            System.out.println("No hay inscripciones registradas.");
+            return;
+        }
+
+        for (Map.Entry<Estudiante, List<Curso>> entry : inscripciones.entrySet()) {
+            Estudiante estudiante = entry.getKey();
+            List<Curso> cursos = entry.getValue();
+
+            System.out.println("Estudiante: " + estudiante.getNombre() + " " + estudiante.getApellido() + " (Carnet: " + estudiante.getCarnet() + ")");
+
+            if (cursos.isEmpty()) {
+                System.out.println("  No está inscrito en ningún curso.");
+            } else {
+                System.out.println("  Cursos inscritos:");
+                for (Curso curso : cursos) {
+                    System.out.println("    - " + curso.getNombre() + " (ID: " + curso.getId() + ")");
+                }
+            }
+        }
     }
 
 }

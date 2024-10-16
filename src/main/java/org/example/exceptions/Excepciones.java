@@ -28,4 +28,24 @@ public class Excepciones {
 
     }
 
+    public static class EstudianteYaInscritoException extends Exception {
+
+        public EstudianteYaInscritoException(String mensaje) {
+
+            super(mensaje);
+
+        }
+
+    }
+
+    public static class EstudianteNoInscritoEnCursoException extends Exception {
+
+        public EstudianteNoInscritoEnCursoException(String mensaje) {
+
+            super(mensaje);
+
+        }
+
+    }
+
 }
